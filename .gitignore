@@ -1,0 +1,48 @@
+# Build output
+bin/
+obj/
+out/
+publish/
+*.dll
+*.exe
+*.pdb
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userprefs
+*.swp
+
+# Rider
+*.sln.iml
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Local config / secrets (keep these out of git)
+appsettings.Development.json
+appsettings.Local.json
+appsettings.json
+*.pfx
+*.key
+secrets.json
+
+# EF Core local artifacts
+*.mdf
+*.ldf
+
+# NuGet
+*.nupkg
+.nuget/
+packages/
+
+#non functional files
+DbSeeder.cs
