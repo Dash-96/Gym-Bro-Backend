@@ -28,13 +28,43 @@ public class WorkoutService
 
     async public Task CreateWorkout(WorkoutDto dto)
     {
-        //! TODO: First check if workout wasnt added already, check by -> created_at + used_id 
+        //! TODO: First check if workout wasnt added already, check by -> created_at + used_id
         // var workout = _context.Workouts.Where(w => w.CreatedAt == dto.)
 
         WorkoutModel workout = new()
         {
             UserId = dto.UserId,
             WorkoutType = dto.WorkoutType,
+            Exercises = [..dto.Exercises.Select(e => new ExerciseModel
+            {
+                ExerciseKey = e.ExerciseKey,
+                ExerciseName = e.ExerciseName,
+                OrderIndex = e.OrderIndex,
+                Sets = [..e.Sets.Select(s => new SetModel
+                {
+                    SetNumber = s.SetNumber,
+                    Reps = s.Reps,
+                    Weight = s.Weight
+                })]
+            })]
+        };
+
+        await _context.Workouts.AddAsync(workout);
+        await _context.SaveChangesAsync();
+    }
+
+    async public Task CreateWorkoutFromMcp(McpWorkoutDto dto)
+    {
+        WorkoutModel workout = new()
+        {
+            UserId = dto.UserId,
+            WorkoutType = dto.WorkoutType,
+            WorkoutAlias = dto.WorkoutAlias,
+            StartedAt = dto.StartedAt ?? DateTime.UtcNow,
+            FinishedAt = dto.FinishedAt,
+            Notes = dto.Notes,
+            CreatedAt = dto.CreatedAt,
+            UpdatedAt = dto.UpdatedAt,
             Exercises = [..dto.Exercises.Select(e => new ExerciseModel
             {
                 ExerciseKey = e.ExerciseKey,

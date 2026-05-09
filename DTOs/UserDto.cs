@@ -8,4 +8,10 @@ namespace GymBroAspBackend.DTOs
     
         public string Password {get;set;} = null!;
     }
+
+    public class McpUser
+    {
+        public int Id {get;set;}
+        public string DisplayName {get;set;}
+    }
 }

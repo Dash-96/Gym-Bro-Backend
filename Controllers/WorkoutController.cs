@@ -24,12 +24,23 @@ namespace GymBro.Controllers
             return Ok(workouts);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<ActionResult<WorkoutDto>> Create([FromBody] WorkoutDto dto)
         {
             await _service.CreateWorkout(dto);
             return CreatedAtAction(nameof(Create) ,dto);
             // return await CreatedAtAction(response);
         }
+
+        [HttpPost("mcp/create")]
+        public async Task<ActionResult<McpWorkoutDto>> McpCreate([FromBody] WorkoutDto dto)
+        {
+            await _service.CreateWorkout(dto);
+            return CreatedAtAction(nameof(Create) ,dto);
+            // return await CreatedAtAction(response);
+        }
+
+
+
     }
 }

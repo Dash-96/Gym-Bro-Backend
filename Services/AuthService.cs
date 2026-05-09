@@ -93,5 +93,16 @@ namespace GymBro.Services
             await _context.SaveChangesAsync();
             return tokenDto;
         }
+
+        public async Task<IEnumerable<McpUser>> GetUsers()
+        {
+            var users = await _context.Users.Select(user => new McpUser
+            {
+                Id= user.Id,
+                DisplayName= user.DisplayName
+            }).ToListAsync();
+
+            return users;
+        }
     }
 }

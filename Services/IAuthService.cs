@@ -11,5 +11,7 @@ namespace GymBro.Services
         Task<AuthDto> Login(UserDto request);
 
         Task<string> Refresh(string refreshToken);
+
+        Task<IEnumerable<McpUser>> GetUsers();
     }
 }

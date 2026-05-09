@@ -1,5 +1,6 @@
 using System.Text;
 using GymBro.Services;
+using GymBroAspBackend.Hubs;
 using GymBroAspBackend.Middlewear;
 using GymBroAspBackend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,19 +11,6 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddOpenApi();
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<GymBroDbContext>(options => options.UseNpgsql(connectionString));
-
-builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddProblemDetails();
-
-builder.Services.AddScoped<WorkoutService>();
-builder.Services.AddScoped<ITokenService , TokenService>();
-builder.Services.AddScoped<IAuthService , AuthService>();
-
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -50,6 +38,22 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
+
+builder.Services.AddSignalR();
+
+builder.Services.AddControllers();
+builder.Services.AddOpenApi();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<GymBroDbContext>(options => options.UseNpgsql(connectionString));
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+builder.Services.AddScoped<WorkoutService>();
+builder.Services.AddScoped<ITokenService , TokenService>();
+builder.Services.AddScoped<IAuthService , AuthService>();
+
 
 var app = builder.Build();
 
@@ -82,5 +86,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();

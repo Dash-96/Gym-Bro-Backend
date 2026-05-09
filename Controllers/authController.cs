@@ -43,5 +43,12 @@ namespace GymBro.Controllers
             Console.WriteLine(userId);
             return "authorized";
         }
+
+        [HttpGet("users")]
+        public async Task<IEnumerable<McpUser>> GetUsers()
+        {
+            var users = await _authService.GetUsers();
+            return users;
+        }
     }
 }
