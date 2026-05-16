@@ -76,7 +76,10 @@ namespace GymBro.Services
 
         public async Task<AuthDto> RegisterUserAsync(UserDto request)
         {
-            var user = new User
+            var tokenDto = new AuthDto();
+            try
+            {
+                var user = new User
             {
                 Phone = request.Phone,
                 DisplayName = request.DisplayName
@@ -84,13 +87,19 @@ namespace GymBro.Services
             var hashedPassword = new PasswordHasher<User>().HashPassword(user, request.Password);
             user.HashedPassword = hashedPassword;
             await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
             var accessToken = _tokenService.GenerateToken(user);
             var refreshToken = _tokenService.GenerateRefreshToken();
-            var tokenDto = new AuthDto() { RefreshToken = refreshToken, AccessToken = accessToken };
+            tokenDto = new AuthDto() { RefreshToken = refreshToken, AccessToken = accessToken };
             user.RefreshToken = tokenDto.RefreshToken;
             user.RefreshTokenExpiery = DateTime.UtcNow.AddDays(7);
 
             await _context.SaveChangesAsync();
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+            
             return tokenDto;
         }
 

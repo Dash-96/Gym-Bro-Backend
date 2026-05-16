@@ -12,9 +12,9 @@ namespace GymBro.Models
         [Column("display_name")]
         public string DisplayName {get;set;} = null!;
         [Column("password")]
-        public string HashedPassword {get;set;} = null!;
+        public string HashedPassword {get;set;} =String.Empty;
         [Column("refresh_token")]
-        public string RefreshToken {get;set;} = null!;
+        public string RefreshToken {get;set;} = String.Empty;
         [Column("refresh_token_expiery")]
         public DateTime RefreshTokenExpiery {get;set;} 
     }

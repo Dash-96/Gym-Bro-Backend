@@ -1,8 +1,10 @@
 using System.Security.Claims;
 using GymBro.Services;
 using GymBroAspBackend.DTOs;
+using GymBroAspBackend.Hubs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace GymBro.Controllers
 {
@@ -50,5 +52,6 @@ namespace GymBro.Controllers
             var users = await _authService.GetUsers();
             return users;
         }
+
     }
 }

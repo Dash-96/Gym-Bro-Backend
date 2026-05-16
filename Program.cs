@@ -53,6 +53,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddScoped<WorkoutService>();
 builder.Services.AddScoped<ITokenService , TokenService>();
 builder.Services.AddScoped<IAuthService , AuthService>();
+builder.Services.AddScoped<INotificationService , NotificationService>();
 
 
 var app = builder.Build();

@@ -12,6 +12,7 @@ public class GymBroDbContext : DbContext
     public DbSet<ExerciseModel> Exercises => Set<ExerciseModel>();
     public DbSet<SetModel> Sets => Set<SetModel>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<NotificationModel> Notifications => Set<NotificationModel>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

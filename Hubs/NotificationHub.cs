@@ -1,17 +1,30 @@
+using GymBro.Models;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymBroAspBackend.Hubs
 {
-    public class NotificationHub: Hub
+    public class NotificationHub : Hub
     {
-        public async Task SendMessage(string user , string message)
+        private GymBroDbContext _dbContext;
+
+        public NotificationHub(GymBroDbContext context)
         {
-            await Clients.All.SendAsync("ReciveMessage" , user , message);
+            _dbContext = context;
         }
 
-        public async Task RTest(string message)
+        public async Task SendFriendRequest(int reciverId)
         {
-            Console.Write("Messaged recived: " + message);
+            try
+            {
+                var userId = Context.UserIdentifier;
+                await Clients.User(reciverId.ToString()).SendAsync("FriendRequest", new { userId, message = $"user {userId} wants to connect with you;" });
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }
