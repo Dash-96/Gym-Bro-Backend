@@ -13,7 +13,7 @@ public class GymBroDbContext : DbContext
     public DbSet<SetModel> Sets => Set<SetModel>();
     public DbSet<User> Users => Set<User>();
     public DbSet<NotificationModel> Notifications => Set<NotificationModel>();
-
+    public DbSet<Friend> Friends => Set<Friend>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -6,5 +6,6 @@ namespace GymBro.Services
     {
          Task SendFriendRequest(int senderId , int reciverId);
          Task<IEnumerable<NotificationDto>> GetFriendRequestsAsync(int userId);
+         Task AcceptFriendRequestAsync(int userId , int friendId);
     }
 }

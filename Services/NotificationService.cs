@@ -37,5 +37,24 @@ namespace GymBro.Services
 
            return requests;
         }
+
+        public async Task AcceptFriendRequestAsync(int userId, int friendId)
+        {
+            try
+            {
+                var friend = new Friend
+                {
+                    UserId = userId,
+                    FriendId = friendId
+                };
+                await _dbContext.Friends.AddAsync(friend);
+                await _dbContext.SaveChangesAsync();
+
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Cant add to friends list " + ex.Message);
+            }
+        }
     }
 }

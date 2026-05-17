@@ -27,7 +27,7 @@ namespace GymBro.Controllers
         {
             var senderName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
             var senderId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            await _notificationService.SendFriendRequest(int.Parse(senderId) , targetId);
+            await _notificationService.SendFriendRequest(int.Parse(senderId), targetId);
             await _hubContext.Clients.User(targetId.ToString()).SendAsync("FriendRequest", new { senderName, message = "wants to connect" });
         }
 
@@ -38,6 +38,23 @@ namespace GymBro.Controllers
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var requests = await _notificationService.GetFriendRequestsAsync(int.Parse(userId));
             return Ok(requests);
+        }
+
+        [Authorize]
+        [HttpGet("accept-friend-request")]
+        public async Task<ActionResult> AcceptFriendRequest([FromQuery] int friendId)
+        {
+            try
+            {
+                var idClaim = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userId = int.Parse(idClaim);
+                await _notificationService.AcceptFriendRequestAsync(userId, friendId);
+                return Ok("Gym Bro Added");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
