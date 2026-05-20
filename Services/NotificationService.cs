@@ -6,6 +6,7 @@ namespace GymBro.Services
 {
     public class NotificationService(GymBroDbContext _dbContext) : INotificationService
     {
+        //= Sends the user a friend request in real time
         public async Task SendFriendRequest(int senderId, int reciverId)
         {
             try
@@ -26,6 +27,7 @@ namespace GymBro.Services
             }
         }
 
+        //= Allows the user to retrive friends request 
          public async Task<IEnumerable<NotificationDto>> GetFriendRequestsAsync(int userId)
         {
            var requests = await _dbContext.Notifications.Where(n => n.TargetUser == userId).Join(_dbContext.Users ,notification => notification.UserId , user=>user.Id , (notification , user) => new NotificationDto
@@ -38,6 +40,7 @@ namespace GymBro.Services
            return requests;
         }
 
+        //= The user accepts the friend request 
         public async Task AcceptFriendRequestAsync(int userId, int friendId)
         {
             try
@@ -48,8 +51,13 @@ namespace GymBro.Services
                     FriendId = friendId
                 };
                 await _dbContext.Friends.AddAsync(friend);
-                await _dbContext.SaveChangesAsync();
-
+                var linesWritten = await _dbContext.SaveChangesAsync();
+                if(linesWritten == 1) /// That means the user successfuly added the the request sender
+                {
+                    var friendReqeustToRemove =await  _dbContext.Notifications.FirstAsync(n => n.UserId == userId && n.TargetUser == friendId);
+                    _dbContext.Notifications.Remove(friendReqeustToRemove);
+                    await _dbContext.SaveChangesAsync();
+                }
             }
             catch(Exception ex)
             {
